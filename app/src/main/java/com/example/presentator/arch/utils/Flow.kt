@@ -34,6 +34,12 @@ internal class FlowLifecycleObserver<T> (
         job = null
     }
 
+    @Keep
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy(owner: LifecycleOwner) {
+        owner.lifecycle.removeObserver(this)
+    }
+
 }
 
 fun <T> Flow<T>.observe(

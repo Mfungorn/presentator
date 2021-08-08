@@ -7,12 +7,12 @@ import androidx.fragment.app.Fragment
 import com.example.presentator.arch.utils.observe
 
 abstract class StatefulFragment<
-        Event : com.example.presentator.arch.Event,
+        Action : com.example.presentator.arch.Action,
         State : ViewState,
         Effect : com.example.presentator.arch.Effect
         >(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
 
-    abstract val viewModel: StatefulViewModel<Event, State, Effect>
+    abstract val viewModel: StatefulViewModel<Action, State, Effect>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

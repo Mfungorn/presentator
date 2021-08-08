@@ -2,6 +2,16 @@ package com.example.presentator.ui.presentations
 
 import android.os.Bundle
 import android.view.View
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.presentator.R
@@ -15,9 +25,8 @@ import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
-// todo : https://developer.android.com/codelabs/jetpack-compose-migration#3
 class PresentationsFragment :
-    StatefulFragment<PresentationsEvent, PresentationsViewState, PresentationsEffect>(R.layout.fragment_main) {
+    StatefulFragment<PresentationsAction, PresentationsViewState, PresentationsEffect>(R.layout.fragment_main) {
     override val viewModel: PresentationsViewModel by viewModel()
     private val binding: FragmentMainBinding by viewBinding(FragmentMainBinding::bind)
 
@@ -52,12 +61,45 @@ class PresentationsFragment :
                 )
                 adapter = presentationsAdapter
             }
-            refreshButton.setOnClickListener {
-                viewModel.sendEvent(PresentationsEvent.RefreshClick)
+            buttonsContainer.setContent {
+                MaterialTheme {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(end = 4.dp),
+                            shape = RoundedCornerShape(8.dp),
+                            onClick = {
+                                viewModel.sendAction {
+                                    PresentationsAction.RefreshClick
+                                }
+                            }) {
+                            Text(text = "Refresh")
+                        }
+                        Button(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 4.dp),
+                            shape = RoundedCornerShape(8.dp),
+                            onClick = {
+                                viewModel.sendAction {
+                                    PresentationsAction.ClearClick
+                                }
+                            }) {
+                            Text(text = "Clear")
+                        }
+                    }
+                }
             }
-            clearButton.setOnClickListener {
-                viewModel.sendEvent(PresentationsEvent.ClearClick)
-            }
+//            refreshButton.setOnClickListener {
+//                viewModel.sendEvent(PresentationsAction.RefreshClick)
+//            }
+//            clearButton.setOnClickListener {
+//                viewModel.sendEvent(PresentationsAction.ClearClick)
+//            }
         }
     }
 

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 abstract class StatefulViewModel<
-        Event : com.example.presentator.arch.Event,
+        Action : com.example.presentator.arch.Action,
         State : ViewState,
         Effect : com.example.presentator.arch.Effect
         >(initialState: State) : ViewModel() {
@@ -15,8 +15,8 @@ abstract class StatefulViewModel<
     private val _state: MutableStateFlow<State> = MutableStateFlow(initialState)
     val state: StateFlow<State> = _state.asStateFlow()
 
-    private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
-    val event: SharedFlow<Event> = _event.asSharedFlow()
+    private val _action: MutableSharedFlow<Action> = MutableSharedFlow()
+    private val action: SharedFlow<Action> = _action.asSharedFlow()
 
     private val _effect: Channel<Effect> = Channel()
     val effect = _effect.receiveAsFlow()
@@ -24,27 +24,27 @@ abstract class StatefulViewModel<
     val currentState: State
         get() = _state.value
 
+    abstract val actionHandler: (event: Action) -> Unit
+
     init {
-        observeEvents()
+        observeActions()
     }
 
-    fun sendEvent(event: Event) {
-        viewModelScope.launch { _event.emit(event) }
+    fun sendAction(actionBuilder: () -> Action) {
+        viewModelScope.launch { _action.emit(actionBuilder()) }
     }
 
     protected fun setState(reduce: State.() -> State) {
-        val newState = currentState.reduce()
-        _state.value = newState
+        _state.value = currentState.reduce()
     }
 
-    protected fun setEffect(builder: () -> Effect) {
-        val effectValue = builder()
-        viewModelScope.launch { _effect.send(effectValue) }
+    protected fun setEffect(effectBuilder: () -> Effect) {
+        viewModelScope.launch { _effect.send(effectBuilder()) }
     }
 
-    private fun observeEvents() {
-        viewModelScope.launch { event.collect(::handleEvent) }
+    private fun observeActions() {
+        viewModelScope.launch {
+            action.collect { actionHandler(it) }
+        }
     }
-
-    abstract fun handleEvent(event: Event)
 }

@@ -7,17 +7,17 @@ import kotlinx.coroutines.launch
 
 class PresentationsViewModel(
     private val getPresentationsUseCase: GetPresentationsUseCase
-) : StatefulViewModel<PresentationsEvent, PresentationsViewState, PresentationsEffect>(
+) : StatefulViewModel<PresentationsAction, PresentationsViewState, PresentationsEffect>(
     PresentationsViewState.Empty
 ) {
 
-    override fun handleEvent(event: PresentationsEvent) {
+    override fun handleAction(event: PresentationsAction) {
         when (event) {
-            PresentationsEvent.RefreshClick -> {
+            PresentationsAction.RefreshClick -> {
                 refresh()
                 setEffect { PresentationsEffect.ShowToast("Refreshed") }
             }
-            PresentationsEvent.ClearClick -> {
+            PresentationsAction.ClearClick -> {
                 clearItems()
                 setEffect { PresentationsEffect.ShowToast("Cleared") }
             }
