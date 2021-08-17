@@ -94,12 +94,6 @@ class PresentationsFragment :
                     }
                 }
             }
-//            refreshButton.setOnClickListener {
-//                viewModel.sendEvent(PresentationsAction.RefreshClick)
-//            }
-//            clearButton.setOnClickListener {
-//                viewModel.sendEvent(PresentationsAction.ClearClick)
-//            }
         }
     }
 
