@@ -1,4 +1,4 @@
-package com.example.presentator.arch.utils
+package com.example.presentator.arch.ext
 
 import androidx.annotation.Keep
 import androidx.lifecycle.*
@@ -32,6 +32,12 @@ internal class FlowLifecycleObserver<T> (
     fun onStop(owner: LifecycleOwner) {
         job?.cancel()
         job = null
+    }
+
+    @Keep
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy(owner: LifecycleOwner) {
+        owner.lifecycle.removeObserver(this)
     }
 
 }

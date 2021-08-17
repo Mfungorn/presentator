@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import com.example.presentator.arch.utils.observe
+import com.example.presentator.arch.ext.observe
 
 abstract class StatefulFragment<
         Event : com.example.presentator.arch.Event,
