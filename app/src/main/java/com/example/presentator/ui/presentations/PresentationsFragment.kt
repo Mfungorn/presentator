@@ -15,7 +15,6 @@ import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
-// todo : https://developer.android.com/codelabs/jetpack-compose-migration#3
 class PresentationsFragment :
     StatefulFragment<PresentationsEvent, PresentationsViewState, PresentationsEffect>(R.layout.fragment_main) {
     override val viewModel: PresentationsViewModel by viewModel()
